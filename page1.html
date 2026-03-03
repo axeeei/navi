@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Navi Dii 🍁</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --warm: #c97b5a;
+    --cream: #fdf3e7;
+    --blush: #f2c4b0;
+    --brown: #6b3a2a;
+    --maple: #e8833a;
+    --soft: #fff8f2;
+  }
+
+  body {
+    background: var(--cream);
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23c97b5a' opacity='0.7'/%3E%3C/svg%3E") 10 10, auto;
+  }
+
+  /* audio */
+  audio { display: none; }
+
+  /* floating petals bg */
+  .petal {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    font-size: 18px;
+    animation: floatDown linear infinite;
+  }
+  @keyframes floatDown {
+    0%   { opacity: 0; transform: translateY(-40px) rotate(0deg); }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(110vh) rotate(360deg); }
+  }
+
+  /* main wrapper */
+  .wrap {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  /* envelope opening animation area */
+  .envelope-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: fadeUp 1.2s ease forwards;
+    opacity: 0;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .tag {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    color: var(--warm);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    animation: fadeUp 1s ease 0.3s forwards;
+    opacity: 0;
+  }
+
+  .big-title {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(52px, 12vw, 90px);
+    color: var(--brown);
+    line-height: 1;
+    text-align: center;
+    animation: fadeUp 1s ease 0.5s forwards;
+    opacity: 0;
+  }
+  .big-title span {
+    color: var(--maple);
+    display: inline-block;
+    animation: wiggle 2s ease-in-out 1.5s infinite;
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-2deg); }
+    50%       { transform: rotate(2deg); }
+  }
+
+  .subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(18px, 5vw, 28px);
+    color: var(--warm);
+    text-align: center;
+    margin-top: 8px;
+    animation: fadeUp 1s ease 0.8s forwards;
+    opacity: 0;
+  }
+
+  /* the card */
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 30px 28px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(180,100,60,0.15), 0 2px 8px rgba(180,100,60,0.08);
+    margin-top: 30px;
+    position: relative;
+    border: 1.5px solid #f0d8c8;
+    animation: fadeUp 1s ease 1s forwards;
+    opacity: 0;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 20px; right: 20px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blush), var(--maple), var(--blush));
+    border-radius: 0 0 4px 4px;
+  }
+
+  .handwrite {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(17px, 4.5vw, 22px);
+    color: #5a3322;
+    line-height: 1.8;
+  }
+
+  .handwrite .hello {
+    font-size: clamp(22px, 6vw, 32px);
+    color: var(--maple);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .handwrite .caps {
+    font-size: clamp(19px, 5vw, 26px);
+    color: var(--brown);
+    font-weight: 700;
+    display: block;
+    margin: 10px 0 4px;
+  }
+
+  .sticker {
+    display: inline-block;
+    font-size: 22px;
+    animation: bounce 1.5s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+
+  .doodle-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin: 14px 0 0;
+    flex-wrap: wrap;
+  }
+
+  /* NO button */
+  .no-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--blush);
+    color: var(--brown);
+    border: 2px solid var(--warm);
+    border-radius: 50px;
+    padding: 10px 22px;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.15s;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(180,100,60,0.2);
+  }
+  .no-btn:hover {
+    background: var(--cream);
+  }
+
+  /* next button */
+  .next-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 14px 40px;
+    background: var(--maple);
+    color: white;
+    border-radius: 50px;
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(232,131,58,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeUp 1s ease 1.3s forwards;
+    opacity: 0;
+  }
+  .next-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 28px rgba(232,131,58,0.45);
+  }
+
+  /* corner doodles */
+  .corner {
+    position: fixed;
+    font-size: 28px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .corner.tl { top: 16px; left: 16px; }
+  .corner.tr { top: 16px; right: 16px; }
+  .corner.bl { bottom: 16px; left: 16px; }
+  .corner.br { bottom: 16px; right: 16px; }
+
+  /* paper texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+
+<audio id="bg-music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- floating petals -->
+<div id="petals"></div>
+
+<!-- corner doodles -->
+<div class="corner tl">🌸</div>
+<div class="corner tr">✨</div>
+<div class="corner bl">🍂</div>
+<div class="corner br">🌷</div>
+
+<div class="wrap">
+  <div class="envelope-area">
+
+    <div class="tag">✉ a lil something just for u ✉</div>
+
+    <div class="big-title">
+      Hey<br>Navi <span>Dii~</span>
+    </div>
+
+    <div class="subtitle">
+      <span class="sticker" style="--d:0s">🍁</span>
+      this whole thing is made just for you
+      <span class="sticker" style="--d:0.3s">🍁</span>
+    </div>
+
+    <div class="card">
+      <div class="handwrite">
+        <span class="hello">Ohayo Navi Diii!! 🌸</span>
+        Yo!! It's me — Dumb, ur small small brother Sidd 👋<br><br>
+        <span class="caps">ISNT IT BEEN A LONG TIME?? 🥺</span>
+        ik ik but listen — today is special.<br>
+        Like REALLY special 🎉<br><br>
+        <span class="caps">SOO TODAY IS YOUR BIRTHDAY!!</span>
+        I was waiting for this day from a looong time fr fr~<br>
+        Cuz it's the <b>best day of your life</b> and you love it so much na? 🥹💗<br><br>
+        So here is ur small present from me —<br>
+        made with all the love I have 🍁✨
+      </div>
+      <div class="doodle-row">
+        <span class="sticker" style="--d:0s">🎂</span>
+        <span class="sticker" style="--d:0.2s">🎀</span>
+        <span class="sticker" style="--d:0.4s">💌</span>
+        <span class="sticker" style="--d:0.6s">🌸</span>
+        <span class="sticker" style="--d:0.8s">✨</span>
+        <span class="sticker" style="--d:1s">🍁</span>
+      </div>
+    </div>
+
+    <a href="page2.html" class="next-btn">open ur gift 🎁 →</a>
+
+  </div>
+</div>
+
+<!-- NO button -->
+<button class="no-btn" id="noBtn">no 🙅</button>
+
+<script>
+  // music autoplay
+  const music = document.getElementById('bg-music');
+  document.addEventListener('click', () => {
+    if (music.paused) music.play().catch(()=>{});
+  }, { once: true });
+  music.play().catch(()=>{});
+
+  // floating petals
+  const emojis = ['🍁','🌸','✨','🌷','💗','🍂'];
+  const container = document.getElementById('petals');
+  function spawnPetal() {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (14 + Math.random() * 16) + 'px';
+    const dur = 5 + Math.random() * 6;
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = Math.random() * 3 + 's';
+    container.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 3) * 1000);
+  }
+  setInterval(spawnPetal, 600);
+
+  // NO button jump
+  const noBtn = document.getElementById('noBtn');
+  noBtn.addEventListener('mouseenter', jump);
+  noBtn.addEventListener('touchstart', jump);
+  function jump() {
+    const vw = window.innerWidth - 120;
+    const vh = window.innerHeight - 60;
+    noBtn.style.left  = Math.random() * vw + 'px';
+    noBtn.style.top   = Math.random() * vh + 'px';
+    noBtn.style.right = 'auto';
+    noBtn.style.bottom = 'auto';
+    noBtn.style.transform = 'rotate(' + (Math.random()*30-15) + 'deg)';
+  }
+
+  // save music state for next pages
+  window.addEventListener('beforeunload', () => {
+    localStorage.setItem('musicTime', music.currentTime);
+  });
+</script>
+</body>
+</html>

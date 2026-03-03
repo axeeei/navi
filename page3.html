@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fav Memories 🍁</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --warm: #c97b5a;
+    --cream: #fdf3e7;
+    --blush: #f2c4b0;
+    --brown: #6b3a2a;
+    --maple: #e8833a;
+    --green: #8bba8f;
+    --softgreen: #eef6ee;
+  }
+
+  body {
+    background: var(--cream);
+    background-image:
+      radial-gradient(ellipse at 10% 20%, #fff3e0 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, #f0f8ee 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, var(--cream) 0%, transparent 100%);
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  audio { display: none; }
+
+  .petal {
+    position: fixed; pointer-events: none; z-index: 0;
+    opacity: 0; animation: floatDown linear infinite;
+  }
+  @keyframes floatDown {
+    0%   { opacity: 0; transform: translateY(-40px) rotate(0deg); }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.4; }
+    100% { opacity: 0; transform: translateY(110vh) rotate(360deg); }
+  }
+
+  .wrap {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 50px 20px 70px;
+    gap: 26px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-label {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--green);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .big-title {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(42px, 10vw, 72px);
+    color: var(--brown);
+    text-align: center;
+    line-height: 1.05;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.4s forwards;
+  }
+  .big-title span { color: var(--maple); }
+
+  /* polaroid image card */
+  .polaroid-wrap {
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.6s forwards;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .polaroid {
+    background: white;
+    padding: 14px 14px 40px;
+    border-radius: 4px;
+    box-shadow: 0 8px 30px rgba(100,60,30,0.15), 0 2px 8px rgba(100,60,30,0.1);
+    transform: rotate(-2.5deg);
+    max-width: 290px;
+    width: 100%;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .polaroid:hover {
+    transform: rotate(0deg) scale(1.03);
+  }
+  .polaroid img {
+    width: 100%;
+    border-radius: 2px;
+    display: block;
+    object-fit: cover;
+    max-height: 260px;
+  }
+  .polaroid .caption {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--brown);
+    text-align: center;
+    margin-top: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 0; right: 0;
+  }
+  .tape {
+    position: absolute;
+    background: rgba(255,230,200,0.75);
+    border: 1px solid rgba(200,150,100,0.25);
+    border-radius: 3px;
+    width: 55px; height: 16px;
+    top: -8px; left: 50%; transform: translateX(-50%) rotate(-2deg);
+  }
+
+  /* memory cards */
+  .memory-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px 22px;
+    max-width: 430px;
+    width: 100%;
+    box-shadow: 0 6px 28px rgba(100,60,30,0.1);
+    border: 1.5px solid #f0ddc8;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.9s ease var(--delay, 0.8s) forwards;
+  }
+  .memory-card .label-tag {
+    position: absolute;
+    top: -12px; left: 20px;
+    background: var(--maple);
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    padding: 3px 14px;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(232,131,58,0.3);
+  }
+
+  .handwrite {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(17px, 4.5vw, 22px);
+    color: #5a3322;
+    line-height: 1.85;
+  }
+  .handwrite .caps {
+    font-size: clamp(18px, 5vw, 25px);
+    color: var(--maple);
+    font-weight: 700;
+    display: block;
+    margin: 6px 0;
+  }
+  .handwrite .heart { color: #e05070; }
+  .handwrite .green { color: var(--green); font-weight: 600; }
+
+  .sticker {
+    display: inline-block;
+    animation: bounce 1.6s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-7px); }
+  }
+
+  .pfp-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--softgreen);
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    border: 1px solid #cce8cc;
+  }
+  .pfp-icon { font-size: 32px; }
+  .pfp-text {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--brown);
+    line-height: 1.5;
+  }
+
+  .next-btn {
+    display: inline-block;
+    padding: 14px 42px;
+    background: var(--maple);
+    color: white;
+    border-radius: 50px;
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(232,131,58,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 1.4s forwards;
+  }
+  .next-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 28px rgba(232,131,58,0.45);
+  }
+
+  .no-btn {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--blush); color: var(--brown);
+    border: 2px solid var(--warm); border-radius: 50px;
+    padding: 10px 22px; font-family: 'Caveat', cursive;
+    font-size: 20px; cursor: pointer; z-index: 999;
+    box-shadow: 0 4px 12px rgba(180,100,60,0.2);
+  }
+
+  .corner { position: fixed; font-size: 26px; opacity: 0.2; pointer-events: none; z-index: 0; }
+  .corner.tl { top: 14px; left: 14px; }
+  .corner.tr { top: 14px; right: 14px; }
+  .corner.bl { bottom: 14px; left: 14px; }
+  .corner.br { bottom: 14px; right: 14px; }
+
+  /* decorative line */
+  .deco-line {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--maple);
+    letter-spacing: 2px;
+    opacity: 0.7;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.1s forwards;
+  }
+</style>
+</head>
+<body>
+
+<audio id="bg-music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<div id="petals"></div>
+<div class="corner tl">🍁</div>
+<div class="corner tr">💗</div>
+<div class="corner bl">🌿</div>
+<div class="corner br">✨</div>
+
+<div class="wrap">
+
+  <div class="section-label">📖 memory lane 📖</div>
+
+  <div class="big-title">
+    FAV <span>MEMORIES</span><br>
+    PAGE 🍁
+  </div>
+
+  <!-- Rakhi polaroid -->
+  <div class="polaroid-wrap">
+    <div class="polaroid">
+      <div class="tape"></div>
+      <img src="1000284236.jpg" alt="First Rakhi from Navi Dii" />
+      <div class="caption">first rakhi ever 🧿🍁</div>
+    </div>
+  </div>
+
+  <!-- PFP memory -->
+  <div class="memory-card" style="--delay: 0.7s;">
+    <div class="label-tag">memory 1 🌸</div>
+    <div class="handwrite">
+      <span class="caps">DO UH STILL REMEMBER UHR PFP DII?? 👀</span>
+      That pfp of urs dii... it still lives rent free in my head lol~<br>
+      <span class="sticker" style="--d:0.2s">😭</span> iconic fr fr
+      <div class="pfp-row">
+        <div class="pfp-icon">🖼️</div>
+        <div class="pfp-text">still ur fav pfp na? 👇<br><span style="color:var(--maple);">fav pfp? (≥Д≤)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rakhi memory -->
+  <div class="memory-card" style="--delay: 0.9s;">
+    <div class="label-tag">memory 2 🧿</div>
+    <div class="handwrite">
+      <span class="caps">THANKSS FOR THAT FIRST RAKHI EVERRR 🧡</span>
+      Thank you soo much dii it means <span class="heart">ALOT</span> to meh 🥹<br><br>
+      Im so lucky to have my <span class="green">first rakhi from uh</span> 💚<br><br>
+      If I was reborn ever —<br>
+      I will ask God to make me<br>
+      <span class="heart">ur REAL brother</span><br>
+      like from the same mother hehe 🥹🍁<br><br>
+      <span style="color:var(--warm); font-weight:600;">Uhr existence matters dii.</span><br>
+      It matters <span class="heart">ALOT</span> to me.<br><br>
+      I failed to become bhai to yh...<br>
+      but <span class="green">uh never failed to become dii of mine</span> hehe 💗
+    </div>
+  </div>
+
+  <div class="deco-line">
+    >>>>>>>>>>>>>>>>>>>💗
+  </div>
+
+  <a href="page4.html" class="next-btn">small edit 🎬 →</a>
+
+</div>
+
+<button class="no-btn" id="noBtn">no 🙅</button>
+
+<script>
+  const music = document.getElementById('bg-music');
+  const savedTime = localStorage.getItem('musicTime');
+  if (savedTime) music.currentTime = parseFloat(savedTime);
+  music.play().catch(()=>{});
+  document.addEventListener('click', () => { if(music.paused) music.play().catch(()=>{}); }, { once: true });
+  window.addEventListener('beforeunload', () => { localStorage.setItem('musicTime', music.currentTime); });
+
+  const emojis = ['🍁','💗','🌿','✨','🍂'];
+  const petalContainer = document.getElementById('petals');
+  function spawnPetal() {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (12 + Math.random() * 15) + 'px';
+    const dur = 5 + Math.random() * 6;
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = Math.random() * 2 + 's';
+    petalContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 3) * 1000);
+  }
+  setInterval(spawnPetal, 700);
+
+  const noBtn = document.getElementById('noBtn');
+  noBtn.addEventListener('mouseenter', jump);
+  noBtn.addEventListener('touchstart', jump);
+  function jump() {
+    const vw = window.innerWidth - 120, vh = window.innerHeight - 60;
+    noBtn.style.left = Math.random() * vw + 'px';
+    noBtn.style.top  = Math.random() * vh + 'px';
+    noBtn.style.right = 'auto'; noBtn.style.bottom = 'auto';
+    noBtn.style.transform = 'rotate(' + (Math.random()*30-15) + 'deg)';
+  }
+</script>
+</body>
+</html>

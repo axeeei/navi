@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You opened it!! 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --warm: #c97b5a;
+    --cream: #fdf3e7;
+    --blush: #f2c4b0;
+    --brown: #6b3a2a;
+    --maple: #e8833a;
+    --purple: #b388cc;
+    --softpurp: #f0e6f8;
+  }
+  body {
+    background: var(--softpurp);
+    background-image: radial-gradient(ellipse at 20% 30%, #f9e0ee 0%, transparent 55%),
+                      radial-gradient(ellipse at 80% 70%, #e8d5f5 0%, transparent 55%),
+                      radial-gradient(ellipse at 50% 50%, #fdf3e7 0%, transparent 80%);
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23b388cc' opacity='0.7'/%3E%3C/svg%3E") 10 10, auto;
+  }
+
+  audio { display: none; }
+
+  .petal {
+    position: fixed; pointer-events: none; z-index: 0;
+    opacity: 0; font-size: 18px;
+    animation: floatDown linear infinite;
+  }
+  @keyframes floatDown {
+    0%   { opacity: 0; transform: translateY(-40px) rotate(0deg); }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.4; }
+    100% { opacity: 0; transform: translateY(110vh) rotate(360deg); }
+  }
+
+  .wrap {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 50px 20px;
+    gap: 24px;
+  }
+
+  /* confetti burst */
+  .confetti-area {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+  .conf {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    animation: confFall linear forwards;
+    opacity: 0;
+  }
+  @keyframes confFall {
+    0%   { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+  }
+
+  .big-title {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(40px, 10vw, 78px);
+    color: var(--brown);
+    text-align: center;
+    line-height: 1.1;
+    animation: popIn 0.8s cubic-bezier(.36,1.5,.5,1) forwards;
+    opacity: 0;
+  }
+  .big-title .accent { color: var(--purple); }
+
+  @keyframes popIn {
+    0%   { opacity: 0; transform: scale(0.6); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 28px 26px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(179,136,204,0.18), 0 2px 8px rgba(179,136,204,0.1);
+    border: 1.5px solid #e8d5f5;
+    animation: fadeUp 0.9s ease 0.4s forwards;
+    opacity: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle at 100% 0%, #f0e6f8 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .handwrite {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(18px, 4.5vw, 23px);
+    color: #5a3322;
+    line-height: 1.85;
+  }
+  .handwrite .caps {
+    font-size: clamp(20px, 5vw, 28px);
+    color: var(--purple);
+    font-weight: 700;
+    display: block;
+    margin: 8px 0;
+  }
+  .handwrite .warm { color: var(--maple); font-weight: 700; }
+
+  .sticker {
+    display: inline-block;
+    animation: bounce 1.6s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-7px); }
+  }
+
+  .thank-line {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(22px, 6vw, 34px);
+    color: var(--warm);
+    text-align: center;
+    margin-top: 6px;
+    animation: fadeUp 0.9s ease 0.7s forwards;
+    opacity: 0;
+  }
+
+  .heart-row {
+    display: flex; gap: 10px; justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 6px;
+    animation: fadeUp 0.9s ease 0.9s forwards;
+    opacity: 0;
+  }
+
+  .badge {
+    background: linear-gradient(135deg, #f9e0ee, #e8d5f5);
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--brown);
+    border: 1px solid #e0c8f0;
+    box-shadow: 0 2px 8px rgba(179,136,204,0.15);
+  }
+
+  /* tape strips */
+  .tape {
+    position: absolute;
+    background: rgba(255,230,200,0.7);
+    border: 1px solid rgba(200,150,100,0.2);
+    border-radius: 3px;
+    transform: rotate(var(--rot, -3deg));
+    width: 50px; height: 14px;
+    pointer-events: none;
+  }
+
+  .next-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 14px 42px;
+    background: linear-gradient(135deg, var(--purple), #d4a8e8);
+    color: white;
+    border-radius: 50px;
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(179,136,204,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.9s ease 1.1s forwards;
+    opacity: 0;
+  }
+  .next-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 28px rgba(179,136,204,0.5);
+  }
+
+  .no-btn {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--blush); color: var(--brown);
+    border: 2px solid var(--warm); border-radius: 50px;
+    padding: 10px 22px; font-family: 'Caveat', cursive;
+    font-size: 20px; cursor: pointer; z-index: 999;
+    box-shadow: 0 4px 12px rgba(180,100,60,0.2);
+    transition: none;
+  }
+
+  .corner { position: fixed; font-size: 26px; opacity: 0.2; pointer-events: none; z-index: 0; }
+  .corner.tl { top: 16px; left: 16px; }
+  .corner.tr { top: 16px; right: 16px; }
+  .corner.bl { bottom: 16px; left: 16px; }
+  .corner.br { bottom: 16px; right: 16px; }
+</style>
+</head>
+<body>
+
+<audio id="bg-music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<div id="petals"></div>
+<div class="confetti-area" id="confetti"></div>
+
+<div class="corner tl">💜</div>
+<div class="corner tr">🎊</div>
+<div class="corner bl">🌸</div>
+<div class="corner br">✨</div>
+
+<div class="wrap">
+
+  <div class="big-title">
+    SOO UH <span class="accent">SUCCESSFULLY</span><br>
+    OPENED IT!! 🎉
+  </div>
+
+  <div class="thank-line">
+    <span class="sticker" style="--d:0s">🥹</span>
+    I'm SO glad uh came~
+    <span class="sticker" style="--d:0.3s">🥹</span>
+  </div>
+
+  <div class="heart-row">
+    <span class="badge">thanks for coming 💗</span>
+    <span class="badge">ur here!! 🌸</span>
+  </div>
+
+  <div class="card">
+    <div class="tape" style="--rot: -5deg; top: -7px; left: 30px;"></div>
+    <div class="tape" style="--rot: 4deg; top: -7px; right: 40px;"></div>
+
+    <div class="handwrite">
+      <span class="caps">HERE IS SOMETHING FOR UH 🎀</span>
+
+      I tried my best navi dii —<br>
+      <span class="warm">SORRY if it don't look good</span> 🥺<br><br>
+
+      Real talk tho —<br>
+      I don't have much good device,<br>
+      but I have the whole world of feelings for uh lol 💜<br><br>
+
+      <span class="caps">THE FACT THAT YOU'RE HERE</span>
+      means <span class="warm">EVERYTHING</span> to me fr.<br><br>
+
+      I was waiting from a long long time<br>
+      for this day to finally come 🍁<br>
+      And nowww it's HERE!! 🎊<br><br>
+      This whole page — this whole thing —<br>
+      <span class="warm">was made for you.</span> Only you. 💗
+    </div>
+
+    <div style="text-align:center; margin-top: 14px;">
+      <span class="sticker" style="--d:0s">🍁</span>
+      <span class="sticker" style="--d:0.2s">💜</span>
+      <span class="sticker" style="--d:0.4s">🎂</span>
+      <span class="sticker" style="--d:0.6s">💌</span>
+      <span class="sticker" style="--d:0.8s">🌸</span>
+    </div>
+  </div>
+
+  <p style="font-family:'Caveat',cursive; font-size:18px; color:var(--purple); text-align:center; opacity:0.8; margin-top:-10px;">
+    >>>>>>>>>>>>>>>>>>>💗
+  </p>
+
+  <a href="page3.html" class="next-btn">fav memories 🍁 →</a>
+
+</div>
+
+<button class="no-btn" id="noBtn">no 🙅</button>
+
+<script>
+  // music
+  const music = document.getElementById('bg-music');
+  const savedTime = localStorage.getItem('musicTime');
+  if (savedTime) music.currentTime = parseFloat(savedTime);
+  music.play().catch(()=>{});
+  document.addEventListener('click', () => { if(music.paused) music.play().catch(()=>{}); }, { once: true });
+  window.addEventListener('beforeunload', () => { localStorage.setItem('musicTime', music.currentTime); });
+
+  // confetti burst on load
+  const confContainer = document.getElementById('confetti');
+  const colors = ['#f2c4b0','#b388cc','#e8833a','#ffd6e7','#c8f0d0','#ffe0a0'];
+  for(let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    c.className = 'conf';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDuration = (2 + Math.random() * 3) + 's';
+    c.style.animationDelay = Math.random() * 1.5 + 's';
+    c.style.width = (6 + Math.random() * 8) + 'px';
+    c.style.height = (6 + Math.random() * 8) + 'px';
+    confContainer.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+
+  // petals
+  const emojis = ['🍁','💜','🌸','✨','💗'];
+  const petalContainer = document.getElementById('petals');
+  function spawnPetal() {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (13 + Math.random() * 14) + 'px';
+    const dur = 5 + Math.random() * 5;
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = Math.random() * 2 + 's';
+    petalContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 3) * 1000);
+  }
+  setInterval(spawnPetal, 700);
+
+  // NO button
+  const noBtn = document.getElementById('noBtn');
+  noBtn.addEventListener('mouseenter', jump);
+  noBtn.addEventListener('touchstart', jump);
+  function jump() {
+    const vw = window.innerWidth - 120;
+    const vh = window.innerHeight - 60;
+    noBtn.style.left = Math.random() * vw + 'px';
+    noBtn.style.top  = Math.random() * vh + 'px';
+    noBtn.style.right = 'auto'; noBtn.style.bottom = 'auto';
+    noBtn.style.transform = 'rotate(' + (Math.random()*30-15) + 'deg)';
+  }
+</script>
+</body>
+</html>
